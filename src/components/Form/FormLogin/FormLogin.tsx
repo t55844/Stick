@@ -1,12 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import { View } from 'react-native';
 import Input from "../TextInput";
 import { useForm, Controller } from "react-hook-form";
 import Button from "../../Button";
+import { MyContext, Response } from "../../MainContext";
 
 
-
-interface FormLogin {
+export interface FormLogin {
     name: string
     email: string
     senha: string
@@ -19,7 +19,18 @@ export default function FormLogin() {
         }
     });
 
-    const onSubmit = data => console.log(data);
+    function handleResponse(text: string, backgroundColor: string) {
+
+    }
+
+    const context = useContext(MyContext)
+    const onSubmit = async (data: FormLogin) => {
+        console.log(data)
+        const resp = await context.setToStorage(data, 'login')
+        resp.error ?
+            handleResponse('This email has already been used by another', 'red') :
+            handleResponse('You has been successfully registered', 'green')
+    };
 
     return (
         <View className='mt-4 flex flex-col justify-around'>
