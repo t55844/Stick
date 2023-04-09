@@ -11,7 +11,7 @@ export default function Snackbar(props: { text: string, type: 'failed' | 'succes
                 null
 
     return (
-        <View className={`bg-red-100 border ${color} px-4 py-3 rounded relative" role="alert`}>
+        <View className={`bg-red-100 border w-3/4 m-auto mt-2 mb-2 ${color} px-4 py-3 rounded relative" role="alert`}>
             <Text className="font-bold">{text}</Text>
         </View>
     )

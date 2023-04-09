@@ -1,10 +1,12 @@
 import React, { useContext, useState } from "react";
-import { View } from 'react-native';
+import { Text, View } from 'react-native';
 import Input from "../TextInput";
 import { useForm, Controller } from "react-hook-form";
 import Button from "../../Button";
 import { MyContext, Response } from "../../MainContext";
 import Snackbar from "../../Feedback/Snackbar";
+import { ScrollView } from "react-native-gesture-handler";
+import TitleOfSection from "../../TitleOfSection";
 
 
 export interface FormLogin {
@@ -34,65 +36,70 @@ export default function FormLogin() {
     };
 
     return (
-        <View className='mt-4 flex flex-col justify-around'>
+        <ScrollView>
 
-            <Controller
-                control={control}
-                rules={{
-                    required: true,
-                }}
-                render={({ field: { onChange, onBlur, value } }) => (
-                    <Input
-                        secureTextEntry={false}
-                        placeholder="Name"
-                        onBlur={onBlur}
-                        onChangeText={onChange}
-                        value={value}
-                    />
-                )}
-                name="name"
-            />
 
-            <Controller
-                control={control}
-                rules={{
-                    required: true,
-                }}
-                render={({ field: { onChange, onBlur, value } }) => (
-                    <Input
-                        secureTextEntry={false}
-                        placeholder="Email"
-                        onBlur={onBlur}
-                        onChangeText={onChange}
-                        value={value}
-                    />
-                )}
-                name="email"
-            />
+            <TitleOfSection text="Make your Login or register" />
+            <View className=' bg-secondary-400 p-3 mt-4 flex flex-col justify-around'>
 
-            <Controller
-                control={control}
-                rules={{
-                    required: true,
-                }}
-                render={({ field: { onChange, onBlur, value } }) => (
-                    <Input
-                        secureTextEntry={true}
-                        placeholder="Password "
-                        onBlur={onBlur}
-                        onChangeText={onChange}
-                        value={value}
-                    />
-                )}
-                name="password"
-            />
+                <Controller
+                    control={control}
+                    rules={{
+                        required: true,
+                    }}
+                    render={({ field: { onChange, onBlur, value } }) => (
+                        <Input
+                            secureTextEntry={false}
+                            placeholder="Name"
+                            onBlur={onBlur}
+                            onChangeText={onChange}
+                            value={value}
+                        />
+                    )}
+                    name="name"
+                />
 
-            {handleResponse.length === 0 ? null :
-                <Snackbar text={handleResponse[0]} type={handleResponse[1]} />
+                <Controller
+                    control={control}
+                    rules={{
+                        required: true,
+                    }}
+                    render={({ field: { onChange, onBlur, value } }) => (
+                        <Input
+                            secureTextEntry={false}
+                            placeholder="Email"
+                            onBlur={onBlur}
+                            onChangeText={onChange}
+                            value={value}
+                        />
+                    )}
+                    name="email"
+                />
 
-            }
-            <Button onPress={handleSubmit(onSubmit)} title="Submit" />
+                <Controller
+                    control={control}
+                    rules={{
+                        required: true,
+                    }}
+                    render={({ field: { onChange, onBlur, value } }) => (
+                        <Input
+                            secureTextEntry={true}
+                            placeholder="Password "
+                            onBlur={onBlur}
+                            onChangeText={onChange}
+                            value={value}
+                        />
+                    )}
+                    name="password"
+                />
 
-        </View>
+                {handleResponse.length === 0 ? null :
+                    <Snackbar text={handleResponse[0]} type={handleResponse[1]} />
+
+                }
+                <Button onPress={handleSubmit(onSubmit)} title="Submit" />
+
+            </View>
+        </ScrollView>
     )
 }
