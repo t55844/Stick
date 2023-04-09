@@ -5,7 +5,8 @@ import FormLogin from './src/components/Form/FormLogin/FormLogin';
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import MainContextProvider from './src/components/MainContext';
-import FormRegister from './src/components/Form/FormRegister/FormRegister';
+import FormRegister from './src/components/Form/FormUserAcount/FormUserAcount';
+import FormUserAcount from './src/components/Form/FormUserAcount/FormUserAcount';
 
 const Drawer = createDrawerNavigator();
 
@@ -15,8 +16,7 @@ function App() {
       <NavigationContainer>
         <Drawer.Navigator>
           <Drawer.Screen name="Home" component={Home} />
-          <Drawer.Screen name="Register" component={FormLogin} />
-          <Drawer.Screen name="Login" component={FormRegister} />
+          <Drawer.Screen name="Login/Register" component={FormUserAcount} />
         </Drawer.Navigator>
       </NavigationContainer>
     </MainContextProvider>
