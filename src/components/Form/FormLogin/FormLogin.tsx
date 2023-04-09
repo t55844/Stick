@@ -1,9 +1,10 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { View } from 'react-native';
 import Input from "../TextInput";
 import { useForm, Controller } from "react-hook-form";
 import Button from "../../Button";
 import { MyContext, Response } from "../../MainContext";
+import Snackbar from "../../Feedback/Snackbar";
 
 
 export interface FormLogin {
@@ -19,17 +20,17 @@ export default function FormLogin() {
         }
     });
 
-    function handleResponse(text: string, backgroundColor: string) {
-
-    }
-
+    const [handleResponse, setHandleResponse] = useState<string[] | ''>('')
     const context = useContext(MyContext)
+
     const onSubmit = async (data: FormLogin) => {
         console.log(data)
         const resp = await context.setToStorage(data, 'login')
         resp.error ?
-            handleResponse('This email has already been used by another', 'red') :
-            handleResponse('You has been successfully registered', 'green')
+            setHandleResponse(['This email has already been used by another', 'failed']) :
+            setHandleResponse(['You has been successfully registered', 'success'])
+
+        setTimeout(() => setHandleResponse(''), 6000)
     };
 
     return (
@@ -86,6 +87,10 @@ export default function FormLogin() {
                 name="password"
             />
 
+            {handleResponse.length === 0 ? null :
+                <Snackbar text={handleResponse[0]} type={handleResponse[1]} />
+
+            }
             <Button onPress={handleSubmit(onSubmit)} title="Submit" />
 
         </View>

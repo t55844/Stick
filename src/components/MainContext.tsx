@@ -13,9 +13,11 @@ async function setToStorage(data: FormLogin, storageKey: 'login') {
     const key = `${storageKey}_${data.email}`
 
     if (storageData.error === true) {
-        const resp = await AsyncStorage.setItem(key, JSON.stringify(data))
+
+        await AsyncStorage.setItem(key, JSON.stringify(data))
             .catch(error => console.log(error))
-        console.log(resp)
+
+        return { error: false }
     } else {
         return { error: true }
     }
@@ -29,8 +31,8 @@ async function getFromStorage(storageKey: string, data: FormLogin): Promise<Resp
         .catch(error => console.log(error))
 
     if (resp !== null) {
-        const data = JSON.parse(resp)
-        return { error: false, data }
+        const value = JSON.parse(resp)
+        return { error: false, data: value }
     } else {
         return { error: true, }
 
