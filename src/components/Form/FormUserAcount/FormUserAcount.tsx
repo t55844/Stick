@@ -4,23 +4,12 @@ import { Response } from "../../../functions/store";
 import Button from "../../Button";
 import { ScrollView } from "react-native-gesture-handler";
 import * as yup from "yup";
+import { emailSchema, passwordSchema } from "../genericSchemeValidation";
 
 const schemaRegister = yup.object({
     name: yup.string().trim().required('this is required'),
-
-    email: yup.string().trim()
-        .matches(
-            /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-            'this must be an email ( email@email.email ) '
-        ).required('this is required'),
-
-    password: yup.string()
-        .min(6, 'Password must be at least 6 characters')
-        .matches(
-            /^(?=.*[a-z])(?=.*[A-Z])/,
-            'Password must contain at least one uppercase and one lowercase character ( 123456Aa )'
-        )
-        .required('Password is required'),
+    email: emailSchema,
+    password: passwordSchema
 }).required();
 type FormRegister = yup.InferType<typeof schemaRegister>;
 
@@ -36,13 +25,13 @@ export default function FormUserAcount() {
         return (
             <ScrollView>
                 < FormModel
-                    fields={[['Email', 'email', false], ['Password', 'password', true]]}
+                    textFields={[['Email', 'email', false], ['Password', 'password', true]]}
                     handleData={handleDataRegister}
                     textFailure="Password or Email not found try again later"
                     textSuccess="You have successfully logged in"
                     titleOfForm="Make your Login"
                 />
-                <Button onPress={() => setRegistered(false)} title="Register" />
+                <Button width="w-1/4" onPress={() => setRegistered(false)} title="Register" />
             </ScrollView>
         )
 
@@ -51,13 +40,13 @@ export default function FormUserAcount() {
             <ScrollView>
                 < FormModel
                     schema={schemaRegister}
-                    fields={[['Email', 'email', false], ['Name', 'name', false], ['Password', 'password', true]]}
+                    textFields={[['Email', 'email', false], ['Name', 'name', false], ['Password', 'password', true]]}
                     handleData={handleDataRegister}
                     textFailure="This email has already been used by another"
                     textSuccess="You has been successfully registered"
                     titleOfForm="Register "
                 />
-                <Button onPress={() => setRegistered(true)} title="Login" />
+                <Button width='w-1/4' onPress={() => setRegistered(true)} title="Login" />
 
 
             </ScrollView>

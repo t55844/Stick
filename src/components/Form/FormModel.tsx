@@ -13,16 +13,17 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 export interface FormModel {
 
-    fields: [string, string, boolean][]
+    textFields: ([string, string, boolean] | [string, string, boolean, 'numeric' | 'email' | 'address' | 'phone' | 'pad'])[]
     textSuccess: string
     textFailure: string
     handleData(data: any): Response
     titleOfForm: string
     schema?: any
+
 }
 
 export default function FormModel(props: FormModel) {
-    const { fields, textSuccess, textFailure, handleData, titleOfForm, schema } = props
+    const { textFields, textSuccess, textFailure, handleData, titleOfForm, schema } = props
 
 
     const { control, handleSubmit, formState: { errors } } = useForm({
@@ -51,7 +52,7 @@ export default function FormModel(props: FormModel) {
             <View className=' bg-secondary-400 p-3 mt-4 flex flex-col justify-around'>
 
 
-                {fields.map(field => (
+                {textFields.map(field => (
                     <Controller
                         key={Math.random()}
                         control={control}
@@ -67,6 +68,7 @@ export default function FormModel(props: FormModel) {
                                     onBlur={onBlur}
                                     onChangeText={(value) => onChange(value)}
                                     value={value}
+                                    keyboardType={field[4] || 'default'}
                                 />
                                 {errors[field[1]] && <WarningTextBox duration={10000} text={` ${errors[field[1]].message}.`} />}
                             </View>
