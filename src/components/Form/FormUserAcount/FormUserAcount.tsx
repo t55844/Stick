@@ -3,6 +3,26 @@ import FormModel from "../FormModel"
 import { Response } from "../../../functions/store";
 import Button from "../../Button";
 import { ScrollView } from "react-native-gesture-handler";
+import * as yup from "yup";
+
+const schemaRegister = yup.object({
+    name: yup.string().trim().required('this is required'),
+
+    email: yup.string().trim()
+        .matches(
+            /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+            'this must be an email ( email@email.email ) '
+        ).required('this is required'),
+
+    password: yup.string()
+        .min(6, 'Password must be at least 6 characters')
+        .matches(
+            /^(?=.*[a-z])(?=.*[A-Z])/,
+            'Password must contain at least one uppercase and one lowercase character ( 123456Aa )'
+        )
+        .required('Password is required'),
+}).required();
+type FormRegister = yup.InferType<typeof schemaRegister>;
 
 export default function FormUserAcount() {
     const [registered, setRegistered] = useState<boolean>(true)
@@ -30,6 +50,7 @@ export default function FormUserAcount() {
         return (
             <ScrollView>
                 < FormModel
+                    schema={schemaRegister}
                     fields={[['Email', 'email', false], ['Name', 'name', false], ['Password', 'password', true]]}
                     handleData={handleDataRegister}
                     textFailure="This email has already been used by another"

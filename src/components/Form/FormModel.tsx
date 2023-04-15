@@ -1,5 +1,5 @@
-import React, { useContext, useState } from "react";
-import { View } from 'react-native';
+import React, { useContext, useMemo, useState } from "react";
+import { Text, View } from 'react-native';
 import { useForm, Controller } from "react-hook-form";
 import { ScrollView } from "react-native-gesture-handler";
 import { Response } from "../../functions/store";
@@ -7,6 +7,8 @@ import Button from "../Button";
 import Snackbar from "../Feedback/Snackbar";
 import Input from "./TextInput";
 import TitleOfSection from "../TitleOfSection";
+import WarningTextBox from "../WarningTextBox";
+import { yupResolver } from '@hookform/resolvers/yup';
 
 
 export interface FormModel {
@@ -14,13 +16,20 @@ export interface FormModel {
     fields: [string, string, boolean][]
     textSuccess: string
     textFailure: string
-    handleData(data): Response
+    handleData(data: any): Response
     titleOfForm: string
+    schema?: any
 }
 
 export default function FormModel(props: FormModel) {
-    const { fields, textSuccess, textFailure, handleData, titleOfForm } = props
-    const { control, handleSubmit, formState: { errors } } = useForm();
+    const { fields, textSuccess, textFailure, handleData, titleOfForm, schema } = props
+
+
+    const { control, handleSubmit, formState: { errors } } = useForm({
+        resolver: yupResolver(schema),
+        reValidateMode: "onSubmit"
+    });
+
 
     const [handleResponse, setHandleResponse] = useState<string[] | ''>('')
 
@@ -33,6 +42,7 @@ export default function FormModel(props: FormModel) {
 
         setTimeout(() => setHandleResponse(''), 6000)
     };
+    const memoizedOnSubmit = useMemo(() => handleSubmit(onSubmit), [handleSubmit, onSubmit]);
 
     return (
         <ScrollView>
@@ -48,14 +58,18 @@ export default function FormModel(props: FormModel) {
                         rules={{
                             required: true,
                         }}
+                        defaultValue={''}
                         render={({ field: { onChange, onBlur, value } }) => (
-                            <Input
-                                secureTextEntry={field[2]}
-                                placeholder={field[0]}
-                                onBlur={onBlur}
-                                onChangeText={onChange}
-                                value={value}
-                            />
+                            <View>
+                                <Input
+                                    secureTextEntry={field[2]}
+                                    placeholder={field[0]}
+                                    onBlur={onBlur}
+                                    onChangeText={(value) => onChange(value)}
+                                    value={value}
+                                />
+                                {errors[field[1]] && <WarningTextBox duration={10000} text={` ${errors[field[1]].message}.`} />}
+                            </View>
                         )}
                         name={field[1]}
                     />
@@ -66,7 +80,7 @@ export default function FormModel(props: FormModel) {
                     <Snackbar text={handleResponse[0]} type={handleResponse[1]} />
 
                 }
-                <Button onPress={handleSubmit(onSubmit)} title="Submit" />
+                <Button onPress={memoizedOnSubmit} title="Submit" />
 
             </View>
         </ScrollView >
