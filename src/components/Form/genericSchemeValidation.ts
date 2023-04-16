@@ -1,5 +1,7 @@
 import * as yup from "yup";
 
+// set of yup schemas that can be used to configure form fields that are common
+
 
 export const emailSchema = yup.string().trim()
     .matches(

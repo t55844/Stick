@@ -6,12 +6,13 @@ import { ScrollView } from "react-native-gesture-handler";
 import * as yup from "yup";
 import { emailSchema, passwordSchema } from "../genericSchemeValidation";
 
-const schemaRegister = yup.object({
+const schema = yup.object({
     name: yup.string().trim().required('this is required'),
     email: emailSchema,
     password: passwordSchema
 }).required();
-type FormRegister = yup.InferType<typeof schemaRegister>;
+
+export type FormRegister = yup.InferType<typeof schema>;
 
 export default function FormUserAcount() {
     const [registered, setRegistered] = useState<boolean>(true)
@@ -39,7 +40,7 @@ export default function FormUserAcount() {
         return (
             <ScrollView>
                 < FormModel
-                    schema={schemaRegister}
+                    schema={schema}
                     textFields={[['Email', 'email', false], ['Name', 'name', false], ['Password', 'password', true]]}
                     handleData={handleDataRegister}
                     textFailure="This email has already been used by another"

@@ -10,6 +10,9 @@ const schema = yup.object({
     duration: yup.string().required('The Duration has been provided')
 }).required();
 
+export type FormProposal = yup.InferType<typeof schema>;
+
+
 export default function FormProposal() {
 
     function handleData(data): Response {

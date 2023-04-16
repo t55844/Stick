@@ -6,13 +6,16 @@ import { emailSchema, passwordSchema } from "../genericSchemeValidation";
 import { ScrollView } from "react-native";
 import Button from "../../Button";
 
-const schemaClientRegister = yup.object({
+const schema = yup.object({
     clientName: yup.string().trim().required('The Client name has been provided'),
     companyName: yup.string().trim().required('The Company name has been provided'),
     email: emailSchema,
     password: passwordSchema,
 
 }).required();
+
+export type FormClient = yup.InferType<typeof schema>;
+
 
 export default function FormClient() {
     const [registered, setRegistered] = useState<boolean>(true)
@@ -32,9 +35,9 @@ export default function FormClient() {
                     titleOfForm="Client Register"
                     textFailure="The email or company name has already been registered"
                     textSuccess="The Client was successfully registered"
-                    schema={schemaClientRegister}
+                    schema={schema}
                 />
-                <Button width="w-1/4" onPress={() => setRegistered(false)} title="Register" />
+                <Button width="w-1/4" onPress={() => setRegistered(false)} title="Login" />
             </ScrollView>
         )
 
@@ -42,14 +45,14 @@ export default function FormClient() {
         return (
             <ScrollView>
                 < FormModel
-                    textFields={[['Email', 'email', false], ['Name', 'name', false], ['Password', 'password', true]]}
+                    textFields={[['Email', 'email', false], ['Password', 'password', true]]}
                     handleData={handleData}
                     textFailure="Password or Email not found try again later"
                     textSuccess="You have successfully logged in"
-                    titleOfForm="Make your Login"
+                    titleOfForm="Client Login"
 
                 />
-                <Button width='w-1/4' onPress={() => setRegistered(true)} title="Login" />
+                <Button width='w-1/4' onPress={() => setRegistered(true)} title="Register" />
 
 
             </ScrollView>

@@ -14,7 +14,7 @@ export default function ProposalList(props: ProposalProps) {
     return (
         <View style={tw`flex-1 bg-white p-4`}>
             {proposals.map((proposal) => (
-                <View key={proposal.id} style={tw`border-b-2 border-gray-200 py-4`}>
+                <View key={Math.random()} style={tw`border-b-2 border-gray-200 py-4`}>
                     <Text style={tw`text-base font-medium text-gray-800`}>
                         {proposal.company}
                     </Text>

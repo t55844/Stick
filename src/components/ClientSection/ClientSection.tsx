@@ -16,7 +16,7 @@ export default function ClientSection() {
             <View className='w-full m-auto mt-5 mb5'>
                 <FormProposal />
             </View>
-            <View className='w-full m-auto mt-5 mb5'>
+            <View className='w-full m-auto mb-10 mt-5 mb5'>
                 <FormClient />
             </View>
         </ScrollView>
