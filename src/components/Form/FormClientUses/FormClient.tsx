@@ -1,42 +1,36 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import FormModel from "../FormModel";
 import { Response } from "../../../functions/store";
-import * as yup from "yup";
-import { emailSchema, passwordSchema } from "../genericSchemeValidation";
+import { loguinSchema } from "../genericSchemeValidation";
 import { ScrollView } from "react-native";
 import Button from "../../Button";
+import FormClientRegister from "./FormClientRegister";
+import { MyContext } from "../../MainContext";
+import { makeLoguin } from "../../../functions/login";
 
-const schema = yup.object({
-    clientName: yup.string().trim().required('The Client name has been provided'),
-    companyName: yup.string().trim().required('The Company name has been provided'),
-    email: emailSchema,
-    password: passwordSchema,
-
-}).required();
-
-export type FormClient = yup.InferType<typeof schema>;
 
 
 export default function FormClient() {
     const [registered, setRegistered] = useState<boolean>(true)
+    const { setEmail, setClientInfo } = useContext(MyContext)
 
+    async function handleData(data): Promise<Response> {
+        const response = await makeLoguin(data, 'client')
 
-    function handleData(data): Response {
-        console.log(' Client success');
-        console.log(data);
-        return { error: true, data: 'oi' }
+        if (response.error) {
+            return response
+        } else {
+            console.log(response.data)
+
+            setEmail(response.data.email)
+            setClientInfo({ name: response.data.clientName, companyName: response.data.companyName })
+            return response
+        }
     }
     if (registered) {
         return (
             <ScrollView>
-                <FormModel
-                    textFields={[['Client name', 'clientName', false], ['Company Name', 'companyName', false], ['Email', 'email', false], ['Password', 'password', true]]}
-                    handleData={handleData}
-                    titleOfForm="Client Register"
-                    textFailure="The email or company name has already been registered"
-                    textSuccess="The Client was successfully registered"
-                    schema={schema}
-                />
+                <FormClientRegister />
                 <Button width="w-1/4" onPress={() => setRegistered(false)} title="Login" />
             </ScrollView>
         )
@@ -50,6 +44,7 @@ export default function FormClient() {
                     textFailure="Password or Email not found try again later"
                     textSuccess="You have successfully logged in"
                     titleOfForm="Client Login"
+                    schema={loguinSchema}
 
                 />
                 <Button width='w-1/4' onPress={() => setRegistered(true)} title="Register" />
