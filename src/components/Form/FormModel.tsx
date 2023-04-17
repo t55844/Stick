@@ -16,9 +16,10 @@ export interface FormModel {
     textFields: ([string, string, boolean] | [string, string, boolean, 'numeric' | 'email' | 'address' | 'phone' | 'pad'])[]
     textSuccess: string
     textFailure: string
-    handleData(data: any): Response
+    handleData(data: any): Promise<Response>
     titleOfForm: string
-    schema?: any
+    schema: any
+    buttonName?: string
 
 }
 
@@ -26,7 +27,7 @@ export interface FormModel {
 // a form with flexibility but without having to manually mount each part
 
 export default function FormModel(props: FormModel) {
-    const { textFields, textSuccess, textFailure, handleData, titleOfForm, schema } = props
+    const { buttonName, textFields, textSuccess, textFailure, handleData, titleOfForm, schema } = props
 
 
     // useForm is an hook provided by reack hook form, that returns methods for creating form
@@ -41,16 +42,13 @@ export default function FormModel(props: FormModel) {
     //onSubmit that handle with data and response
     // receive handleData method that has been passed on create form
     const onSubmit = async (data) => {
-        console.log(data)
-        const resp = handleData(data)
+        const resp = await handleData(data)
         resp.error ?
             setHandleResponse([textFailure, 'failed']) :
             setHandleResponse([textSuccess, 'success'])
 
         setTimeout(() => setHandleResponse(''), 6000)
     };
-
-    const memoizedOnSubmit = useMemo(() => handleSubmit(onSubmit), [handleSubmit, onSubmit]);
 
     return (
         <ScrollView>
@@ -97,7 +95,7 @@ export default function FormModel(props: FormModel) {
                         <Snackbar text={handleResponse[0]} type={handleResponse[1]} />
 
                 }
-                <Button onPress={memoizedOnSubmit} title="Submit" />
+                <Button onPress={handleSubmit(onSubmit)} title={buttonName || ' Submit'} />
 
             </View>
         </ScrollView >

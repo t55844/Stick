@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import FormModel from "../FormModel"
-import { Response } from "../../../functions/store";
+import { Response, setToStorage } from "../../../functions/store";
 import Button from "../../Button";
 import { ScrollView } from "react-native-gesture-handler";
 import * as yup from "yup";
-import { emailSchema, passwordSchema } from "../genericSchemeValidation";
+import { emailSchema, loguinSchema, passwordSchema } from "../genericSchemeValidation";
+import FormLoguinUser from "./FormLoguinUser";
 
 const schema = yup.object({
     name: yup.string().trim().required('this is required'),
@@ -17,35 +18,29 @@ export type FormRegister = yup.InferType<typeof schema>;
 export default function FormUserAcount() {
     const [registered, setRegistered] = useState<boolean>(true)
 
-    function handleDataRegister(data): Response {
-        console.log('handled with success');
-        console.log(data);
-        return { error: true, data: 'oi' }
+    async function handleDataRegister(data): Promise<Response> {
+        return await setToStorage(data, 'user')
     }
     if (registered) {
         return (
             <ScrollView>
-                < FormModel
-                    textFields={[['Email', 'email', false], ['Password', 'password', true]]}
-                    handleData={handleDataRegister}
-                    textFailure="Password or Email not found try again later"
-                    textSuccess="You have successfully logged in"
-                    titleOfForm="Make your Login"
-                />
+                <FormLoguinUser />
                 <Button width="w-1/4" onPress={() => setRegistered(false)} title="Register" />
             </ScrollView>
         )
 
-    } else {
+    }
+    if (!registered) {
         return (
             <ScrollView>
                 < FormModel
                     schema={schema}
-                    textFields={[['Email', 'email', false], ['Name', 'name', false], ['Password', 'password', true]]}
+                    textFields={[['Name', 'name', false], ['Email', 'email', false], ['Password', 'password', true]]}
                     handleData={handleDataRegister}
                     textFailure="This email has already been used by another"
                     textSuccess="You has been successfully registered"
                     titleOfForm="Register "
+                    buttonName="Send"
                 />
                 <Button width='w-1/4' onPress={() => setRegistered(true)} title="Login" />
 
