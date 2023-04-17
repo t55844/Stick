@@ -7,7 +7,7 @@ export default function Home() {
 
     return (
         <ScrollView
-            className='flex-1 '>
+            className='flex-1 bg-primary-100'>
 
             <TitleOfSection text="Welcome !" />
             <View className='bg-gray-100 p-4  m-auto bg-transparent w-full bg-secondary-400  flex flex-col justify-center items-center '>

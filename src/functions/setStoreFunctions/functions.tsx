@@ -29,10 +29,10 @@ export async function storeOnRespectiveLocal(storeData: storeData, data: dataInf
             return await setWithAsyncStorage(storeData, type, data, key)
 
         case 'proposals':
-
+            storeData[type].push(data as FormProposal)
             await AsyncStorage.setItem(
                 key, JSON.stringify(
-                    storeData[type].push(data as FormProposal)
+                    storeData
                 ))
                 .catch(error => console.log(error))
 

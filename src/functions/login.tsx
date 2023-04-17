@@ -17,10 +17,7 @@ export async function makeLoguin(data: loginData, type: typeData): Promise<Respo
 
 
 function compareData(data: loginData, type: typeData, store: storeData): Response {
-
     if (store[type].email === data.email && store[type].password === data.password) {
-        console.log(data.email === store[type].email)
-        console.log(store)
         return { error: false, data: store[type] }
     } else {
         return { error: true }

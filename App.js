@@ -13,16 +13,16 @@ const Drawer = createDrawerNavigator();
 
 function App() {
   return (
-    <MainContextProvider>
+    < MainContextProvider >
       <NavigationContainer>
         <Drawer.Navigator>
           <Drawer.Screen name="Home" component={Home} />
-          <Drawer.Screen name="Login/Register" component={FormUserAcount} />
+          <Drawer.Screen name="User" component={FormUserAcount} />
           <Drawer.Screen name="Client" component={ClientSection} />
         </Drawer.Navigator>
         <LoggedInUserInfo />
       </NavigationContainer>
-    </MainContextProvider>
+    </MainContextProvider >
 
   );
 }

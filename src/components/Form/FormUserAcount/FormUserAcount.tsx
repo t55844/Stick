@@ -23,7 +23,7 @@ export default function FormUserAcount() {
     }
     if (registered) {
         return (
-            <ScrollView>
+            <ScrollView className='bg-primary-100'>
                 <FormLoguinUser />
                 <Button width="w-1/4" onPress={() => setRegistered(false)} title="Register" />
             </ScrollView>
@@ -32,7 +32,7 @@ export default function FormUserAcount() {
     }
     if (!registered) {
         return (
-            <ScrollView>
+            <ScrollView className='bg-primary-100'>
                 < FormModel
                     schema={schema}
                     textFields={[['Name', 'name', false], ['Email', 'email', false], ['Password', 'password', true]]}

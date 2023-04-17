@@ -1,7 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import FormModel from "../FormModel";
-import { Response } from "../../../functions/store";
+import { Response, setToStorage } from "../../../functions/store";
 import * as yup from "yup";
+import { MyContext } from "../../MainContext";
+
+interface FormProposalProps {
+    showModal: () => void
+}
 
 const schema = yup.object({
     description: yup.string().trim().required('The Client name has been provided'),
@@ -13,12 +18,19 @@ const schema = yup.object({
 export type FormProposal = yup.InferType<typeof schema>;
 
 
-export default function FormProposal() {
+export default function FormProposal(props: FormProposalProps) {
+    const { showModal } = props
+    const { email } = useContext(MyContext)
 
-    function handleData(data): Response {
-        console.log(' Proposal success');
-        console.log(data);
-        return { error: true, data: 'oi' }
+    async function handleData(data): Promise<Response> {
+        if (email !== '') {
+            data['email'] = email;
+            return await setToStorage(data, 'proposals')
+        } else {
+            showModal()
+            return { error: true }
+        }
+
     }
 
     return (
