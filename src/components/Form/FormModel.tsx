@@ -9,6 +9,7 @@ import Input from "./TextInput";
 import TitleOfSection from "../TitleOfSection";
 import WarningTextBox from "../WarningTextBox";
 import { yupResolver } from '@hookform/resolvers/yup';
+import { MyContext } from "../MainContext";
 
 
 export interface FormModel {
@@ -37,17 +38,15 @@ export default function FormModel(props: FormModel) {
     });
 
     //status that contain the text feedback for onSubmit response
-    const [handleResponse, setHandleResponse] = useState<string[] | ''>('')
-
+    const { showSnackbackBar } = useContext(MyContext)
     //onSubmit that handle with data and response
     // receive handleData method that has been passed on create form
     const onSubmit = async (data) => {
         const resp = await handleData(data)
         resp.error ?
-            setHandleResponse([textFailure, 'failed']) :
-            setHandleResponse([textSuccess, 'success'])
+            showSnackbackBar(textFailure, 'failed') :
+            showSnackbackBar(textSuccess, 'success')
 
-        setTimeout(() => setHandleResponse(''), 6000)
     };
 
     return (
@@ -90,11 +89,6 @@ export default function FormModel(props: FormModel) {
 
                 ))}
 
-                {// feedback form about information submitted if is successful or failed
-                    handleResponse.length === 0 ? null :
-                        <Snackbar text={handleResponse[0]} type={handleResponse[1]} />
-
-                }
                 <Button onPress={handleSubmit(onSubmit)} title={buttonName || ' Submit'} />
 
             </View>

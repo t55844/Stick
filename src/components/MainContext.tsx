@@ -24,7 +24,9 @@ export const MyContext = React.createContext({
     setClientInfo: (clientInfo: clientInfo) => void {},
     proposals: [],
     setProposals: (proposals: Proposals[]) => void {},
-    Logout: (): void => { }
+    Logout: (): void => { },
+    snackbackBar: { visibility: false, type: 'failed', msg: '' },
+    showSnackbackBar: (msg: string, type: 'failed' | 'success', time?: number) => void {}
 })
 
 export default function MainContextProvider({ children }) {
@@ -35,6 +37,7 @@ export default function MainContextProvider({ children }) {
         companyName: '',
     })
     const [proposals, setProposals] = useState<Proposals[]>([])
+    const [snackbackBar, setSnackbackBar] = useState<{ visibility: boolean, type: 'failed' | 'success', msg: string }>({ visibility: false, type: 'failed', msg: '' })
 
     function Logout(): void {
         setEmail('')
@@ -44,6 +47,11 @@ export default function MainContextProvider({ children }) {
             companyName: '',
         })
         setProposals([])
+    }
+
+    function showSnackbackBar(msg: string, type: 'failed' | 'success', time?: number) {
+        setSnackbackBar({ msg, type, visibility: true })
+        setTimeout(() => setSnackbackBar({ msg: '', type, visibility: false }), time | 4000)
     }
 
     useEffect(() => async () => {
@@ -66,6 +74,8 @@ export default function MainContextProvider({ children }) {
                 proposals,
                 setProposals,
                 Logout,
+                snackbackBar,
+                showSnackbackBar
             }}
         >
             {children}
