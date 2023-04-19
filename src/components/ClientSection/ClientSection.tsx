@@ -5,6 +5,7 @@ import FormProposal from "../Form/FormClientUses/FormProposal";
 import MyProposal from "./MyProposal";
 import TitleOfSection from "../TitleOfSection";
 import ModalWrapper from "../ModalWraper";
+import Button from "../Button";
 
 export default function ClientSection() {
 
@@ -16,7 +17,7 @@ export default function ClientSection() {
 
     return (
 
-        <ScrollView className='bg-primary-100'>
+        <ScrollView className='bg-primary-100 '>
             <View className='w-full m-auto mt-5 mb5'>
                 <TitleOfSection text="My Proposal" />
                 <MyProposal />
@@ -31,6 +32,12 @@ export default function ClientSection() {
                     <FormClient />
                 </View>
             </ModalWrapper>
+
+            <Button
+                onPress={() => setModalVisible(true)}
+                title="Client Registration/Logguin"
+                width="w-3/4"
+            />
         </ScrollView>
     )
 }

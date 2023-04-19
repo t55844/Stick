@@ -20,7 +20,6 @@ export default function FormClient() {
         if (response.error) {
             return response
         } else {
-            console.log('Form Client' + response)
 
             setEmail(response.data.email)
             setClientInfo({ name: response.data.clientName, companyName: response.data.companyName })

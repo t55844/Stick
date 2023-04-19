@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { setToStorage, getFromStorage } from "../functions/store";
+import React, { useEffect, useState } from "react";
 import { FormProposal } from "./Form/FormClientUses/FormProposal";
+import { getFromStorage } from "../functions/store";
 
 interface userInfo {
     name: string
@@ -46,6 +46,13 @@ export default function MainContextProvider({ children }) {
         setProposals([])
     }
 
+    useEffect(() => async () => {
+        const resp = await getFromStorage({ email }, 'proposals')
+        if (!resp.error) {
+            setProposals(resp.data.proposals)
+        }
+
+    }, [email])
 
     return (
         <MyContext.Provider
