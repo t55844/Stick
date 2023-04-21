@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import FormModel from "../FormModel";
-import { Response, setToStorage } from "../../../functions/store";
+import { Response, getFromStorage, setToStorage } from "../../../functions/store";
 import * as yup from "yup";
 import { MyContext } from "../../MainContext";
 
@@ -20,12 +20,17 @@ export type FormProposal = yup.InferType<typeof schema>;
 
 export default function FormProposal(props: FormProposalProps) {
     const { showModal } = props
-    const { email } = useContext(MyContext)
+    const { email, setProposals } = useContext(MyContext)
 
     async function handleData(data): Promise<Response> {
         if (email !== '') {
             data['email'] = email;
-            return await setToStorage(data, 'proposals')
+            await setToStorage(data, 'proposals')
+
+            const newProposals = await getFromStorage({ email }, 'proposals')
+            setProposals(newProposals.proposals)
+
+            return newProposals
         } else {
             showModal()
             return { error: true }

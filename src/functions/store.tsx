@@ -1,11 +1,13 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { FormRegister } from '../components/Form/FormUserAcount/FormUserAcount';
 import { FormProposal } from '../components/Form/FormClientUses/FormProposal';
-import { storeOnRespectiveLocal } from './setStoreFunctions/functions';
+import { setWithAsyncStorage, storeOnRespectiveLocal } from './setStoreFunctions/functions';
 import { FormClient } from '../components/Form/FormClientUses/FormClientRegister';
 
 export interface Proposals extends FormProposal {
     email: string
+    progress?: string
+    status?: string
 }
 export type storeData = (FormRegister | FormClient | Proposals[])
 
@@ -57,4 +59,16 @@ export async function getFromStorage(data: dataInfo, type: typeData): Promise<Re
         return { error: true }
 
     }
+}
+
+
+export async function updateProposals(proposalList: Proposals[], extraInfo: { status: string, progress: string }, index: number): Promise<Response<Proposals[]>> {
+    proposalList[index]['progress'] = extraInfo.progress
+    proposalList[index]['status'] = extraInfo.status
+    await setWithAsyncStorage({ proposals: proposalList }, `${proposalList[index].email}_proposals`)
+
+
+    const proposalListUpdated = (await getFromStorage(proposalList[index], 'proposals')).data
+
+    return { error: false, data: proposalListUpdated.proposals }
 }

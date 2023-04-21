@@ -1,10 +1,9 @@
 import AsyncStorage from "@react-native-async-storage/async-storage"
-import { FormProposal } from "../../components/Form/FormClientUses/FormProposal"
-import { Proposals, Response, dataInfo, storeData, typeData } from "../store"
+import { Proposals, Response, dataInfo, setToStorage, storeData, typeData } from "../store"
 import { FormRegister } from "../../components/Form/FormUserAcount/FormUserAcount"
 import { FormClient } from "../../components/Form/FormClientUses/FormClientRegister"
 
-async function setWithAsyncStorage(data: storeData, key: string): Promise<Response<FormClient | FormRegister>> {
+export async function setWithAsyncStorage(data: storeData, key: string): Promise<Response<FormClient | FormRegister>> {
 
     await AsyncStorage.setItem(
         key, JSON.stringify(
